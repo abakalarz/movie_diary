@@ -20,8 +20,12 @@
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 // Ersatzbild, wenn ein Film kein Poster hat (poster_path ist dann null).
-// placehold.co erzeugt ein graues Bild mit dem Text aus "?text=".
-const PLACEHOLDER_URL = "https://placehold.co/500x750?text=Kein+Poster";
+// placehold.co erzeugt ein Bild nach dem Muster:
+//   /<Breite>x<Höhe>/<Hintergrundfarbe>/<Textfarbe>?text=<Text>
+// Die Farben passen zu DESIGN.md ("Poster-Platzhalter: bg-zinc-800
+// text-zinc-500"): 27272a ist zinc-800, 71717a ist zinc-500.
+const PLACEHOLDER_URL =
+  "https://placehold.co/500x750/27272a/71717a?text=Kein+Poster";
 
 // Maximale Länge der Beschreibung auf der Karte.
 const MAX_OVERVIEW_LENGTH = 120;
@@ -125,13 +129,17 @@ export function createMovieCard(movie, options = {}) {
   // z. B. mit document.querySelector('[data-movie-id="550"]').
   card.dataset.movieId = movie.id;
 
-  // Tailwind-Klassen (eigenes CSS ist laut FR006 nicht erlaubt):
+  // Tailwind-Klassen (eigenes CSS ist laut FR006 nicht erlaubt).
+  // Farben und Rahmen kommen aus DESIGN.md (Zeilen "Fläche / Karte" und
+  // "Karte Hover"), damit alle Seiten einheitlich aussehen:
   //   flex flex-col  -> Inhalt untereinander anordnen
   //   h-full         -> Karte füllt die Höhe ihrer Grid-Zelle (alle gleich hoch)
-  //   overflow-hidden rounded-lg -> runde Ecken, Bild ragt nicht heraus
-  //   bg-white shadow-md         -> weißer Hintergrund mit Schatten
+  //   overflow-hidden -> das Bild ragt nicht über die runden Ecken hinaus
+  //   bg-zinc-900 border border-zinc-800 rounded-2xl -> dunkle Fläche mit Rahmen
+  //   transition hover:-translate-y-1 -> Karte hebt sich beim Überfahren
+  //                                      mit der Maus sanft ein Stück an
   card.className =
-    "flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-md";
+    "flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition hover:-translate-y-1 hover:border-zinc-700";
 
   // --- 2. Poster ------------------------------------------------------------
   const poster = document.createElement("img");
@@ -143,33 +151,38 @@ export function createMovieCard(movie, options = {}) {
   poster.loading = "lazy";
   // aspect-[2/3] hält das typische Poster-Format (Breite : Höhe = 2 : 3).
   // object-cover füllt die Fläche, ohne das Bild zu verzerren.
-  poster.className = "aspect-[2/3] w-full object-cover";
+  // bg-zinc-800 ist die Hintergrundfarbe, solange das Bild noch lädt.
+  poster.className = "aspect-[2/3] w-full bg-zinc-800 object-cover";
 
   // --- 3. Textbereich -------------------------------------------------------
   // Ein Container für alles unter dem Bild.
   //   flex-1 -> nimmt den restlichen Platz der Karte ein
   //   gap-2  -> Abstand zwischen den Elementen
+  //   p-3 sm:p-4 -> auf dem Handy (2 schmale Spalten) etwas weniger
+  //                 Innenabstand, ab "sm" (640px Breite) etwas mehr
   const body = document.createElement("div");
-  body.className = "flex flex-1 flex-col gap-2 p-4";
+  body.className = "flex flex-1 flex-col gap-2 p-3 sm:p-4";
 
   // Titel
   const title = document.createElement("h3");
   // textContent statt innerHTML: der Titel wird garantiert nur als Text
   // angezeigt (siehe Erklärung ganz oben).
   title.textContent = movie.title;
-  title.className = "text-lg font-semibold leading-tight text-gray-900";
+  // Klassen laut DESIGN.md "Titel". Auf dem Handy etwas kleinere Schrift.
+  title.className = "font-semibold leading-tight text-zinc-100 sm:text-lg";
 
   // Jahr und Bewertung in einer Zeile, z. B. "1999 · ★ 8.4"
   const meta = document.createElement("p");
   meta.textContent = `${getYear(movie.release_date)} · ★ ${formatRating(
     movie.vote_average,
   )}`;
-  meta.className = "text-sm text-gray-600";
+  // Klassen laut DESIGN.md "Nebeninfo".
+  meta.className = "text-sm text-zinc-400";
 
   // Gekürzte Beschreibung
   const overview = document.createElement("p");
   overview.textContent = truncate(movie.overview, MAX_OVERVIEW_LENGTH);
-  overview.className = "text-sm text-gray-700";
+  overview.className = "text-sm text-zinc-400";
 
   // append hängt Elemente der Reihe nach als Kinder an.
   body.append(title, meta, overview);
@@ -183,9 +196,11 @@ export function createMovieCard(movie, options = {}) {
     // mt-auto schiebt den Button ganz nach unten in der Karte. So stehen
     // die Buttons im Grid auf einer Linie, auch wenn die Texte
     // unterschiedlich lang sind.
-    // Die "disabled:"-Klassen gelten nur, wenn der Button deaktiviert ist.
+    // Die übrigen Klassen stammen aus DESIGN.md ("Primärer Button" und
+    // "Button deaktiviert"). Die "disabled:"-Klassen gelten nur, wenn der
+    // Button deaktiviert ist, also nach dem Speichern als Favorit.
     button.className =
-      "mt-auto rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400";
+      "mt-auto rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-violet-500 disabled:cursor-default disabled:bg-zinc-800 disabled:text-zinc-400";
 
     // Text und Zustand setzen wir über unsere eigene Funktion, damit die
     // Logik nur an einer Stelle steht.
