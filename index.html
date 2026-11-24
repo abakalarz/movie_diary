@@ -1,13 +1,61 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Diary</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script type="module" src="js/main.js"></script>
-  </head>
-  <body>
-    <div class="bg-red-500 p-2 text-white">Test: Tailwind działa</div>
-  </body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Diary</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+  <header class="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4" aria-label="Hauptnavigation">
+      <a href="index.html" class="flex items-center gap-2 text-lg font-semibold tracking-tight">
+        <span class="size-2.5 rounded-full bg-violet-500"></span>Movie Diary
+      </a>
+      <ul class="flex items-center gap-1 text-sm font-medium">
+        <li><a href="index.html" aria-current="page" class="rounded-lg px-3 py-2 text-zinc-400 transition hover:text-white aria-[current=page]:bg-zinc-800 aria-[current=page]:text-white">Startseite</a></li>
+        <li><a href="journal.html" class="rounded-lg px-3 py-2 text-zinc-400 transition hover:text-white aria-[current=page]:bg-zinc-800 aria-[current=page]:text-white">Journal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="relative isolate overflow-hidden border-b border-zinc-900">
+    <div class="pointer-events-none absolute -top-24 left-1/2 -z-10 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-violet-600/20 blur-3xl"></div>
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:py-24">
+      <p class="text-sm font-medium text-violet-400">Dein Kino-Tagebuch</p>
+      <h1 class="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">Merke dir jeden Film, den du gesehen hast.</h1>
+      <form id="search-form" role="search" class="mt-8 flex max-w-xl items-center gap-2 rounded-2xl border border-zinc-800 bg-zinc-900 p-2 focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-500/20">
+        <label for="search-input" class="sr-only">Filmtitel</label>
+        <input id="search-input" type="search" required autocomplete="off" placeholder="Filmtitel suchen …" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-base text-white placeholder:text-zinc-500 focus:outline-none" />
+        <button type="submit" class="rounded-xl bg-violet-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-violet-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-300">Suchen</button>
+      </form>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="mb-6 text-2xl font-semibold tracking-tight">Beliebte Filme</h2>
+    <!-- Person A: Filmkarten -->
+    <section id="movies-container" class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"></section>
+  </main>
+
+  <footer class="border-t border-zinc-900">
+    <p class="mx-auto max-w-6xl px-4 py-6 text-sm text-zinc-500">Movie Diary &middot; Bootcamp-Projekt. Dieses Produkt nutzt die TMDB-API, wird von TMDB aber nicht unterstützt oder zertifiziert.</p>
+  </footer>
+
+  <dialog id="search-dialog" aria-labelledby="search-title" class="m-auto max-h-[85vh] w-[min(64rem,92vw)] overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 p-0 text-zinc-100 shadow-2xl backdrop:bg-black/70 backdrop:backdrop-blur-sm">
+    <div class="flex max-h-[85vh] flex-col">
+      <div class="flex items-center justify-between gap-4 border-b border-zinc-800 px-6 py-4">
+        <h2 id="search-title" class="text-lg font-semibold tracking-tight">Suchergebnisse</h2>
+        <button id="search-close" type="button" class="rounded-lg px-3 py-1.5 text-sm text-zinc-400 transition hover:bg-zinc-800 hover:text-white focus-visible:outline-2 focus-visible:outline-violet-400">Schließen</button>
+      </div>
+      <div class="overflow-y-auto p-6">
+        <p id="search-message" role="status" class="hidden text-zinc-400"></p>
+        <div id="search-results" class="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/search.js"></script>
+</body>
 </html>

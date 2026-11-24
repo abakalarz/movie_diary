@@ -1,13 +1,38 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movie Diary – Journal</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script type="module" src="js/journal.js"></script>
-  </head>
-  <body>
-    <div class="bg-red-500 p-2 text-white">Test: Tailwind działa</div>
-  </body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal – Movie Diary</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+  <header class="sticky top-0 z-40 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4" aria-label="Hauptnavigation">
+      <a href="index.html" class="flex items-center gap-2 text-lg font-semibold tracking-tight">
+        <span class="size-2.5 rounded-full bg-violet-500"></span>Movie Diary
+      </a>
+      <ul class="flex items-center gap-1 text-sm font-medium">
+        <li><a href="index.html" class="rounded-lg px-3 py-2 text-zinc-400 transition hover:text-white aria-[current=page]:bg-zinc-800 aria-[current=page]:text-white">Startseite</a></li>
+        <li><a href="journal.html" aria-current="page" class="rounded-lg px-3 py-2 text-zinc-400 transition hover:text-white aria-[current=page]:bg-zinc-800 aria-[current=page]:text-white">Journal</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-12">
+    <p class="text-sm font-medium text-violet-400">Deine Sammlung</p>
+    <h1 class="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Journal</h1>
+    <p class="mt-3 max-w-xl text-zinc-400">Alle gespeicherten Filme mit deinen Notizen.</p>
+
+    <!-- Person C: Leer-Hinweis und Favoriten -->
+    <p id="empty-message" class="mt-10 hidden rounded-2xl border border-zinc-800 bg-zinc-900 p-6 text-zinc-300">Dein Journal ist noch leer. <a href="index.html" class="font-semibold text-violet-400 underline underline-offset-4 hover:text-violet-300">Suche einen Film</a> und speichere ihn hier.</p>
+    <section id="favourites-container" class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></section>
+  </main>
+
+  <footer class="border-t border-zinc-900">
+    <p class="mx-auto max-w-6xl px-4 py-6 text-sm text-zinc-500">Movie Diary &middot; Bootcamp-Projekt. Dieses Produkt nutzt die TMDB-API, wird von TMDB aber nicht unterstützt oder zertifiziert.</p>
+  </footer>
+
+  <script type="module" src="js/journal.js"></script>
+</body>
 </html>
