@@ -1,35 +1,64 @@
-// Zuständig: Person C
-// Nur diese Datei greift auf den localStorage zu.
 // Schlüssel: "favourites" (JSON-Array von Movie-Objekten plus note).
-// Gelesen und geschrieben wird mit JSON.parse und JSON.stringify.
 
-// getFavourites()
-// Parameter: keine
-// Rückgabe: Array der Favoriten (leer, wenn nichts gespeichert oder Daten kaputt)
+const STORAGE_KEY = "favourites";
+
+function saveFavourites(favourites) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(favourites));
+}
+
 export function getFavourites() {
-  return [];
+  try {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (storedData === null) {
+      return [];
+    }
+    const data = JSON.parse(storedData);
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return [];
+  }
 }
 
-// isFavourite(id)
-// Parameter: id (number)
-// Rückgabe: boolean
 export function isFavourite(id) {
-  return false;
+  return getFavourites().some((favourite) => favourite.id === id);
 }
 
-// addFavourite(movie)
-// Parameter: movie (Movie-Objekt)
-// Rückgabe: true wenn neu gespeichert, false wenn schon vorhanden
 export function addFavourite(movie) {
-  return false;
+  if (isFavourite(movie.id)) {
+    return false;
+  }
+  const favourite = {
+    id: movie.id,
+    title: movie.title,
+    poster_path: movie.poster_path,
+    release_date: movie.release_date,
+    overview: movie.overview,
+    vote_average: movie.vote_average,
+    note: "",
+  };
+  const favourites = getFavourites();
+  favourites.push(favourite);
+  saveFavourites(favourites);
+  return true;
 }
 
-// removeFavourite(id)
-// Parameter: id (number)
-// Rückgabe: nichts
-export function removeFavourite(id) {}
+export function removeFavourite(id) {
+  const favourites = getFavourites().filter((favourite) => {
+    if (favourite.id !== id) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+  saveFavourites(favourites);
+}
 
-// updateNote(id, text)
-// Parameter: id (number), text (string)
-// Rückgabe: nichts (unbekannte id wird ignoriert)
-export function updateNote(id, text) {}
+export function updateNote(id, text) {
+  const favourites = getFavourites();
+  const favourite = favourites.find((item) => item.id === id);
+  if (!favourite) {
+    return;
+  }
+  favourite.note = text;
+  saveFavourites(favourites);
+}

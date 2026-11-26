@@ -24,8 +24,7 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 //   /<Breite>x<Höhe>/<Hintergrundfarbe>/<Textfarbe>?text=<Text>
 // Die Farben passen zu DESIGN.md ("Poster-Platzhalter: bg-zinc-800
 // text-zinc-500"): 27272a ist zinc-800, 71717a ist zinc-500.
-const PLACEHOLDER_URL =
-  "https://placehold.co/500x750/27272a/71717a?text=Kein+Poster";
+const PLACEHOLDER_URL = "https://placehold.co/500x750/27272a/71717a?text=Kein+Poster";
 
 // Maximale Länge der Beschreibung auf der Karte.
 const MAX_OVERVIEW_LENGTH = 120;
@@ -113,12 +112,7 @@ export function createMovieCard(movie, options = {}) {
   // Destrukturierung: Wir holen die Felder aus dem options-Objekt in eigene
   // Variablen. Steht hinter einem Namen "= ...", ist das der Standardwert,
   // falls das Feld fehlt.
-  const {
-    showFavouriteButton = true,
-    isFavourite = false,
-    onFavourite = null,
-    extraContent = null,
-  } = options;
+  const { showFavouriteButton = true, isFavourite = false, onFavourite = null, extraContent = null } = options;
 
   // --- 1. Äußerer Rahmen der Karte -----------------------------------------
   // <article> ist das passende HTML-Element für einen eigenständigen Inhalt.
@@ -138,8 +132,7 @@ export function createMovieCard(movie, options = {}) {
   //   bg-zinc-900 border border-zinc-800 rounded-2xl -> dunkle Fläche mit Rahmen
   //   transition hover:-translate-y-1 -> Karte hebt sich beim Überfahren
   //                                      mit der Maus sanft ein Stück an
-  card.className =
-    "flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition hover:-translate-y-1 hover:border-zinc-700";
+  card.className = "flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition hover:-translate-y-1 hover:border-zinc-700";
 
   // --- 2. Poster ------------------------------------------------------------
   const poster = document.createElement("img");
@@ -173,9 +166,7 @@ export function createMovieCard(movie, options = {}) {
 
   // Jahr und Bewertung in einer Zeile, z. B. "1999 · ★ 8.4"
   const meta = document.createElement("p");
-  meta.textContent = `${getYear(movie.release_date)} · ★ ${formatRating(
-    movie.vote_average,
-  )}`;
+  meta.textContent = `${getYear(movie.release_date)} · ★ ${formatRating(movie.vote_average)}`;
   // Klassen laut DESIGN.md "Nebeninfo".
   meta.className = "text-sm text-zinc-400";
 
